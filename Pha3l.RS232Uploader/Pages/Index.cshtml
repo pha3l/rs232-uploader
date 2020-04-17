@@ -1,0 +1,41 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<form method="post" enctype="multipart/form-data">
+    <div class="form-group mx-sm-3 mb-2">
+        <div class="custom-file">
+            <input type="file" class="custom-file-input" id="customFile" asp-for="UploadedFile">
+            <label class="custom-file-label" for="customFile">Choose file</label>
+            <input type="submit" class="btn btn-primary mb-2"/>
+        </div>
+    </div>
+</form>
+
+@if (!string.IsNullOrEmpty(Model.Toast?.Message))
+{
+    <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
+        <div class="toast" id="toaster" style="position: absolute; top: 0; right: 0;">
+            <div class="toast-body @Model.Toast?.Class">
+                @Model.Toast?.Message
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            const el = $('#toaster');
+            el.toast({ delay: 2000 });
+            el.toast('show');
+            
+            $('.custom-file-input').on("change", function() {
+                const fileName = $(this).val().split("\\").pop();
+                $(this).siblings('.custom-file-label').addClass("selected").html(fileName);
+            });
+        });
+    </script>
+}
